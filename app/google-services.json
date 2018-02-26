@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "16902772124",
+    "firebase_url": "https://smart-home-ea728.firebaseio.com",
+    "project_id": "smart-home-ea728",
+    "storage_bucket": "smart-home-ea728.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:16902772124:android:ad9cc2906084428f",
+        "android_client_info": {
+          "package_name": "com.jakebethune.smarthome"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "16902772124-u8ipemursr202oq4vj80fpgqp4631b3c.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.jakebethune.smarthome",
+            "certificate_hash": "45b062f97404ffc5f8a7e9fd7c9b8faffc10a049"
+          }
+        },
+        {
+          "client_id": "16902772124-vthd70gq36jasqjnghaa89qao3dnq8jh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB9zepUYFOYkkbMsnqC68FYqy877PfYW5Q"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "16902772124-vthd70gq36jasqjnghaa89qao3dnq8jh.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
