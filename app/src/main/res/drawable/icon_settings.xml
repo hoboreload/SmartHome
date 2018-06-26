@@ -13,5 +13,5 @@
                 android:top="10dp"/>
         </shape>
     </item>
-    <item android:drawable="@drawable/alarm" />
+    <item android:drawable="@drawable/settings" />
 </layer-list>

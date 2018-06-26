@@ -12,13 +12,13 @@ import android.widget.TextView;
  * Created by bethunej01 on 26/2/18.
  */
 
-public class GridviewAdapter extends BaseAdapter {
+public class HomeAdapter extends BaseAdapter {
 
     private Context context;
     private final String[] gridviewText;
     private final int[] gridViewImage;
 
-    public GridviewAdapter(Context context, String[] gridviewText, int[] gridViewImage) {
+    public HomeAdapter(Context context, String[] gridviewText, int[] gridViewImage) {
         this.context = context;
         this.gridViewImage = gridViewImage;
         this.gridviewText = gridviewText;
@@ -47,7 +47,7 @@ public class GridviewAdapter extends BaseAdapter {
 
         if(convertView == null) {
             gridView = new View(context);
-            gridView = inflater.inflate(R.layout.gridview_layout, null);
+            gridView = inflater.inflate(R.layout.layout_home, null);
             TextView textViewAndroid = (TextView) gridView.findViewById(R.id.gridview_text);
             ImageView imageViewAndroid = (ImageView) gridView.findViewById(R.id.gridview_image);
             textViewAndroid.setText(gridviewText[position]);

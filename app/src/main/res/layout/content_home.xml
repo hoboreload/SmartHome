@@ -3,12 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.jakebethune.smarthome.GridviewActivity"
-    tools:showIn="@layout/activity_main"
+    tools:context="com.jakebethune.smarthome.HomeActivity"
+    tools:showIn="@layout/activity_home"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="16dp"
-    android:background="@drawable/maxresdefault">
+    android:background="@drawable/green3">
 
     <GridView
         android:id="@+id/menu_gridview"
