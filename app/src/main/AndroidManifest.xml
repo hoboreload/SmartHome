@@ -17,8 +17,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".LightingActivity"
-            android:label="Lighting"
+            android:name=".DeviceActivity"
+            android:label="Devices"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".HomeActivity"

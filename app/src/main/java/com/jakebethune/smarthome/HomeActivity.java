@@ -16,8 +16,8 @@ import android.widget.Toast;
 public class HomeActivity extends AppCompatActivity {
 
     GridView gridview;
-    String[] gridviewText = {"Home", "Lighting", "Fans", "Weather", "Alarm", "Reminders", "Profile", "Settings",};
-    int[] gridviewImage = {R.drawable.home, R.drawable.lighting, R.drawable.fan, R.drawable.weather, R.drawable.alarm, R.drawable.reminders, R.drawable.profile, R.drawable.settings,};
+    String[] gridviewText = {"Home", "Devices", "Weather", "Alarm", "Reminders", "Profile", "Settings",};
+    int[] gridviewImage = {R.drawable.home, R.drawable.devices, R.drawable.weather, R.drawable.alarm, R.drawable.reminders, R.drawable.profile, R.drawable.settings};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +42,7 @@ public class HomeActivity extends AppCompatActivity {
                         break;
 
                     case 1:
-                        intent =  new Intent(view.getContext(), LightingActivity.class);
+                        intent =  new Intent(view.getContext(), DeviceActivity.class);
                         startActivity(intent);
                         break;
 
@@ -67,11 +67,6 @@ public class HomeActivity extends AppCompatActivity {
                         break;
 
                     case 6:
-                        intent =  new Intent(view.getContext(), HomeActivity.class);
-                        startActivity(intent);
-                        break;
-
-                    case 7:
                         intent =  new Intent(view.getContext(), HomeActivity.class);
                         startActivity(intent);
                         break;

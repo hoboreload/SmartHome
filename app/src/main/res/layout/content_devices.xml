@@ -3,8 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.jakebethune.smarthome.LightingActivity"
-    tools:showIn="@layout/activity_lighting"
+    tools:context="com.jakebethune.smarthome.DeviceActivity"
+    tools:showIn="@layout/activity_devices"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="16dp">
@@ -18,7 +18,7 @@
         android:paddingBottom="16dp" />
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/lightRecyclerView"
+        android:id="@+id/deviceRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/addDeviceButton"

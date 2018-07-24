@@ -1,25 +1,25 @@
 package com.jakebethune.smarthome;
 
-public class Light {
+public class Device {
 
-    private String lightName;
+    private String deviceName;
     private String powerState;
 
-    public Light() {
+    public Device() {
         //Left empty for call by Firebase
     }
 
-    public Light(String lightName, String powerState) {
-        this.lightName= lightName;
+    public Device(String deviceName, String powerState) {
+        this.deviceName = deviceName;
         this.powerState = powerState;
     }
 
-    public String getLightName() {
-        return lightName;
+    public String getDeviceName() {
+        return deviceName;
     }
 
-    public void setLightName(String lightName) {
-        this.lightName = lightName;
+    public void setDeviceName(String deviceName) {
+        this.deviceName = deviceName;
     }
 
     public String getPowerState() {
