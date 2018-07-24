@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Switch;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -22,6 +23,8 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class LightingActivity extends AppCompatActivity {
 
@@ -29,8 +32,8 @@ public class LightingActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private LightingAdapter adapter;
     private DatabaseReference databaseReference;
-    private FirebaseAuth firebaseAuth;
     private EditText deviceNameEditText;
+    private Switch deviceSwitch;
 
 
     @Override
@@ -41,11 +44,14 @@ public class LightingActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         databaseReference = FirebaseDatabase.getInstance().getReference();
-        firebaseAuth = FirebaseAuth.getInstance();
 
         recyclerView = (RecyclerView) findViewById(R.id.lightRecyclerView);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(linearLayoutManager);
+
+        refreshData();
+
+        deviceSwitch = (Switch) findViewById(R.id.lightSwitch);
 
         Button createDeviceButton = (Button) findViewById(R.id.addDeviceButton);
         createDeviceButton.setOnClickListener(new View.OnClickListener() {
@@ -54,8 +60,6 @@ public class LightingActivity extends AppCompatActivity {
                 displayDialog();
             }
         });
-
-        refreshData();
     }
 
     private void displayDialog() {
@@ -83,7 +87,7 @@ public class LightingActivity extends AppCompatActivity {
                             } else {
                                 String deviceName = deviceNameEditText.getText().toString();
                                 String deviceCapital = deviceName.substring(0, 1).toUpperCase() + deviceName.substring(1);
-                                int powerState = 0;
+                                String powerState = "0";
                                 saveDevice(deviceCapital, powerState);
                                 deviceNameEditText.setText("");
                                 Toast.makeText(LightingActivity.this, "Device Added", Toast.LENGTH_LONG).show();
@@ -111,16 +115,9 @@ public class LightingActivity extends AppCompatActivity {
         });
     }
 
-    private void saveDevice(String name, int powerState) {
-        Light light = new Light();
-        String deviceCapital = name.substring(0, 1).toUpperCase() + name.substring(1);
-        light.setLightName(deviceCapital);
-        light.setPowerState(powerState);
-        databaseReference.child("Light").push().setValue(light);
-    }
-
     public void refreshData() {
-        Query query = databaseReference.child("Light").orderByChild("lightName");
+//        Query query = databaseReference.child("Light").orderByChild("lightName");
+        Query query = databaseReference.child("Light");
         query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -130,9 +127,20 @@ public class LightingActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                //Do nothing
+
             }
         });
+    }
+
+    private void saveDevice(String name, String powerState) {
+        Light light = new Light();
+        String deviceCapital = name.substring(0, 1).toUpperCase() + name.substring(1);
+        light.setLightName(deviceCapital);
+        light.setPowerState(powerState);
+//        databaseReference.child("Light").push().setValue(light);
+
+        databaseReference.child("Light").child(deviceCapital).setValue(light);
+
     }
 
     public void getUpdates(DataSnapshot dataSnapshot) {
@@ -152,4 +160,5 @@ public class LightingActivity extends AppCompatActivity {
             Toast.makeText(this, "No data", Toast.LENGTH_SHORT).show();
         }
     }
+
 }
