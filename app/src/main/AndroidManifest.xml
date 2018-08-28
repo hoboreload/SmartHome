@@ -17,11 +17,11 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".DeviceActivity"
+            android:name=".activity.DeviceActivity"
             android:label="Devices"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".HomeActivity"
+            android:name=".activity.HomeActivity"
             android:label="@string/appName"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -30,6 +30,18 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".activity.ForecastActivity"
+            android:label="Forecast"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activity.SensortagActivity"
+            android:label="Sensortag"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activity.TodaysWeatherActivity"
+            android:label="Today's Weather"
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>
