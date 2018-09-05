@@ -87,7 +87,7 @@ public class DeviceActivity extends AppCompatActivity {
                             String deviceName = deviceNameEditText.getText().toString();
                             String deviceCapital = deviceName.substring(0, 1).toUpperCase() + deviceName.substring(1);
                             String powerState = "0";
-                            saveDevice(deviceCapital, powerState);
+                            saveDevice(deviceCapital, powerState, 24, 25);
                             deviceNameEditText.setText("");
                             Toast.makeText(DeviceActivity.this, "Device Added", Toast.LENGTH_LONG).show();
                             dialog.dismiss();
@@ -131,11 +131,13 @@ public class DeviceActivity extends AppCompatActivity {
         });
     }
 
-    private void saveDevice(String name, String powerState) {
+    private void saveDevice(String name, String powerState, int minTemp, int maxTemp) {
         Device device = new Device();
         String deviceCapital = name.substring(0, 1).toUpperCase() + name.substring(1);
         device.setDeviceName(deviceCapital);
         device.setPowerState(powerState);
+        device.setMinTemp(minTemp);
+        device.setMaxTemp(maxTemp);
         databaseReference.child("Device").child(deviceCapital).setValue(device);
 
     }
@@ -147,6 +149,8 @@ public class DeviceActivity extends AppCompatActivity {
             Device device = new Device();
             device.setDeviceName(ds.getValue(Device.class).getDeviceName());
             device.setPowerState(ds.getValue(Device.class).getPowerState());
+            device.setMinTemp(ds.getValue(Device.class).getMinTemp());
+            device.setMaxTemp(ds.getValue(Device.class).getMaxTemp());
             devices.add(device);
         }
 

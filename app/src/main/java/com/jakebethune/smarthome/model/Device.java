@@ -4,14 +4,18 @@ public class Device {
 
     private String deviceName;
     private String powerState;
+    private int minTemp;
+    private int maxTemp;
 
     public Device() {
         //Left empty for call by Firebase
     }
 
-    public Device(String deviceName, String powerState) {
+    public Device(String deviceName, String powerState, int minTemp, int maxTemp) {
         this.deviceName = deviceName;
         this.powerState = powerState;
+        this.minTemp = minTemp;
+        this.maxTemp = maxTemp;
     }
 
     public String getDeviceName() {
@@ -30,4 +34,19 @@ public class Device {
         this.powerState = powerState;
     }
 
+    public int getMinTemp() {
+        return minTemp;
+    }
+
+    public void setMinTemp(int minTemp) {
+        this.minTemp = minTemp;
+    }
+
+    public int getMaxTemp() {
+        return maxTemp;
+    }
+
+    public void setMaxTemp(int maxTemp) {
+        this.maxTemp = maxTemp;
+    }
 }

@@ -1,6 +1,7 @@
 package com.jakebethune.smarthome.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,10 +9,13 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.jakebethune.smarthome.R;
+import com.jakebethune.smarthome.activity.DeviceSettingsActivity;
+import com.jakebethune.smarthome.activity.HomeActivity;
 import com.jakebethune.smarthome.model.Device;
 
 import java.util.ArrayList;
@@ -72,7 +76,18 @@ public class DeviceAdapter extends RecyclerView.Adapter<DeviceAdapter.ViewHolder
 
             deviceNameText = (TextView) itemView.findViewById(R.id.deviceName);
             devicePowerStateText = (TextView) itemView.findViewById(R.id.deviceStateText);
+
             RelativeLayout lightNameLayout = (RelativeLayout) itemView.findViewById(R.id.deviceItemRelativeLayout);
+            lightNameLayout.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    Toast.makeText(v.getContext(), "Long Clicked: " + deviceNameText.getText().toString() , Toast.LENGTH_SHORT).show();
+                    Intent intent =  new Intent(v.getContext(), DeviceSettingsActivity.class);
+                    intent.putExtra("DEVICE_NAME", deviceNameText.getText().toString());
+                    context.startActivity(intent);
+                    return true;
+                }
+            });
 
             powerButton = (Button) itemView.findViewById(R.id.deviceButton);
             powerButton.setOnClickListener(new View.OnClickListener() {
@@ -89,7 +104,6 @@ public class DeviceAdapter extends RecyclerView.Adapter<DeviceAdapter.ViewHolder
                     }
                 }
             });
-
         }
 
         private void updateDeviceSwitch(String state, String name) {

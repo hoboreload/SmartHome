@@ -43,6 +43,11 @@
             android:label="Today&apos;s Weather"
             android:theme="@style/AppTheme.NoActionBar" />
 
+        <activity
+            android:name=".activity.DeviceSettingsActivity"
+            android:label="Device Settings"
+            android:theme="@style/AppTheme.NoActionBar" />
+
         <receiver android:name=".activity.SmartHomeWidget">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
