@@ -17,16 +17,12 @@ import com.google.firebase.database.ValueEventListener;
 import com.jakebethune.smarthome.R;
 import com.jakebethune.smarthome.model.TodaysWeather;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 /**
  * Created by bethunej01 on 4/10/17.
  */
 
 public class TodaysWeatherActivity extends AppCompatActivity {
-    private ProgressDialog mProgressDialog;
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,34 +31,27 @@ public class TodaysWeatherActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        mProgressDialog = new ProgressDialog(this);
-        mProgressDialog.setTitle("Retrieving Your Weather Data...");
-        mProgressDialog.show();
-
-        TextView dayHeading = (TextView) findViewById(R.id.dayHeading);
-        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-        Date date = new Date();
-        String newDate = dateFormat.format(date);
-        SimpleDateFormat simpleDateformat = new SimpleDateFormat("EEEE");
-        String newDay = simpleDateformat.format(date);
-        dayHeading.setText(newDay + " - " + newDate);
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setCancelable(false);
+        progressDialog.setTitle("Retrieving Your Weather Data...");
+        progressDialog.show();
 
         getWeatherDatabase();
     }
 
     public void getWeatherDatabase() {
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
-        Query query = databaseReference.child("Weather").limitToLast(1);
+        Query query = databaseReference.child("Weather");
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
                     getUpdates(dataSnapshot);
-                    mProgressDialog.dismiss();
+                    progressDialog.dismiss();
                 }
 
                 else {
-                    mProgressDialog.dismiss();
+                    progressDialog.dismiss();
                     Toast.makeText(TodaysWeatherActivity.this, "Cannot retrieve weather data! Please try again", Toast.LENGTH_LONG).show();
                 }
             }
@@ -75,63 +64,53 @@ public class TodaysWeatherActivity extends AppCompatActivity {
     }
 
     public void getUpdates(DataSnapshot dataSnapshot) {
-        for (DataSnapshot ds : dataSnapshot.getChildren()) {
-            String clouds = String.valueOf(ds.getValue(TodaysWeather.class).getClouds())+"%";
-            String currentTemp = String.valueOf(ds.getValue(TodaysWeather.class).getCurrentTemp())+"°C";
-            String detail = ds.getValue(TodaysWeather.class).getDetail();
-            String humidity = String.valueOf(ds.getValue(TodaysWeather.class).getHumidity())+"%";
-            String maxTemp = String.valueOf(ds.getValue(TodaysWeather.class).getMaxTemp())+"°C";
-            String minTemp = String.valueOf(ds.getValue(TodaysWeather.class).getMinTemp())+"°C";
-            String sunrise = ds.getValue(TodaysWeather.class).getSunrise();
-            String sunset = ds.getValue(TodaysWeather.class).getSunset();
-            String weather = ds.getValue(TodaysWeather.class).getWeather();
-            String windDirection = String.valueOf(ds.getValue(TodaysWeather.class).getWindDirection())+"°";
-            String windSpeed = String.valueOf(ds.getValue(TodaysWeather.class).getWindSpeed())+" m/s";
+        TodaysWeather weather = dataSnapshot.getValue(TodaysWeather.class);
 
-            TextView cloudsText = (TextView) findViewById(R.id.cloudValue);
-            cloudsText.setText(clouds);
+        TextView dayHeading = (TextView) findViewById(R.id.dayHeading);
+        dayHeading.setText(weather.getTimestamp());
 
-            TextView currentTempText = (TextView) findViewById(R.id.currentTempValue);
-            currentTempText.setText(currentTemp);
+        TextView cloudsText = (TextView) findViewById(R.id.cloudValue);
+        cloudsText.setText(weather.getClouds()+"%");
 
-            TextView detailText = (TextView) findViewById(R.id.detailValue);
-            detailText.setText(detail);
+        TextView currentTempText = (TextView) findViewById(R.id.currentTempValue);
+        currentTempText.setText(weather.getCurrentTemp()+"°C");
 
-            TextView humidityText = (TextView) findViewById(R.id.humidityValue);
-            humidityText.setText(humidity);
+        TextView humidityText = (TextView) findViewById(R.id.humidityValue);
+        humidityText.setText(weather.getHumidity()+"%");
 
-            TextView maxTempText = (TextView) findViewById(R.id.maxTempValue);
-            maxTempText.setText(maxTemp);
+        TextView maxTempText = (TextView) findViewById(R.id.maxTempValue);
+        maxTempText.setText(weather.getMaxTemp()+"°C");
 
-            TextView minTempText = (TextView) findViewById(R.id.minTempValue);
-            minTempText.setText(minTemp);
+        TextView minTempText = (TextView) findViewById(R.id.minTempValue);
+        minTempText.setText(weather.getMinTemp()+"°C");
 
-            TextView sunriseText = (TextView) findViewById(R.id.sunriseValue);
-            sunriseText.setText(sunrise);
+        TextView sunriseText = (TextView) findViewById(R.id.sunriseValue);
+        sunriseText.setText(weather.getSunrise());
 
-            TextView sunsetText = (TextView) findViewById(R.id.sunsetValue);
-            sunsetText.setText(sunset);
+        TextView sunsetText = (TextView) findViewById(R.id.sunsetValue);
+        sunsetText.setText(weather.getSunset());
 
-            TextView weatherText = (TextView) findViewById(R.id.weatherValue);
-            weatherText.setText(weather);
+        TextView weatherText = (TextView) findViewById(R.id.weatherValue);
+        String detailText = weather.getWeather() + "- " + weather.getDetail();
+        weatherText.setText(detailText);
 
-            TextView windDirectionText = (TextView) findViewById(R.id.windDirectionValue);
-            windDirectionText.setText(windDirection);
+        TextView windDirectionText = (TextView) findViewById(R.id.windDirectionValue);
+        windDirectionText.setText(weather.getWindDirection()+"°");
 
-            TextView windSpeedText = (TextView) findViewById(R.id.windSpeedValue);
-            windSpeedText.setText(windSpeed);
+        TextView windSpeedText = (TextView) findViewById(R.id.windSpeedValue);
+        windSpeedText.setText(weather.getWindSpeed()+" m/s");
 
             ImageView icon = (ImageView) findViewById(R.id.weatherIcon);
 
-            if(weather.equals("Clear")) {
+            if(weather.getWeather().equals("Clear")) {
                 icon.setImageResource(R.mipmap.clear_sky);
             }
 
-            if(weather.equals("Clouds")) {
-                if(detail.equals("few clouds")) {
+            if(weather.getWeather().equals("Clouds")) {
+                if(weather.getDetail().equals("few clouds")) {
                     icon.setImageResource(R.mipmap.few_clouds);
                 }
-                if(detail.equals("scattered clouds")) {
+                if(weather.getDetail().equals("scattered clouds")) {
                     icon.setImageResource(R.mipmap.scattered_clouds);
                 }
                 else {
@@ -139,12 +118,12 @@ public class TodaysWeatherActivity extends AppCompatActivity {
                 }
             }
 
-            if(weather.equals("Rain"))
+            if(weather.getWeather().equals("Rain"))
             {
-                if (detail.equals("light rain") || (detail.equals("moderate rain") || (detail.equals("heavy intensity rain") || (detail.equals("very heavy rain") || (detail.equals("extreme rain")))))) {
+                if (weather.getDetail().equals("light rain") || (weather.getDetail().equals("moderate rain") || (weather.getDetail().equals("heavy intensity rain") || (weather.getDetail().equals("very heavy rain") || (weather.getDetail().equals("extreme rain")))))) {
                     icon.setImageResource(R.mipmap.rain);
                 }
-                else if (detail.equals("freezing rain")) {
+                else if (weather.getDetail().equals("freezing rain")) {
                     icon.setImageResource(R.mipmap.snow);
                 }
                 else {
@@ -152,35 +131,34 @@ public class TodaysWeatherActivity extends AppCompatActivity {
                 }
             }
 
-            if(weather.equals("Thunderstorm")) {
+            if(weather.getWeather().equals("Thunderstorm")) {
                 icon.setImageResource(R.mipmap.thunderstorm);
             }
 
-            if(weather.equals("Drizzle")) {
+            if(weather.getWeather().equals("Drizzle")) {
                 icon.setImageResource(R.mipmap.shower_rain);
             }
 
-            if(weather.equals("Snow")) {
+            if(weather.getWeather().equals("Snow")) {
                 icon.setImageResource(R.mipmap.snow);
             }
 
-            if(weather.equals("Atmosphere")) {
+            if(weather.getWeather().equals("Atmosphere")) {
                 icon.setImageResource(R.mipmap.mist);
             }
 
-            if(weather.equals("Extreme")) {
+            if(weather.getWeather().equals("Extreme")) {
                 icon.setImageResource(R.mipmap.extreme);
             }
 
-            if(weather.equals("Additional")) {
-                if((detail.equals("calm") || (detail.equals("light breeze") || (detail.equals("gentle breeze") || (detail.equals("moderate breeze") || (detail.equals("fresh breeze") || (detail.equals("strong breeze")))))))) {
+            if(weather.getWeather().equals("Additional")) {
+                if((weather.getDetail().equals("calm") || (weather.getDetail().equals("light breeze") || (weather.getDetail().equals("gentle breeze") || (weather.getDetail().equals("moderate breeze") || (weather.getDetail().equals("fresh breeze") || (weather.getDetail().equals("strong breeze")))))))) {
                     icon.setImageResource(R.mipmap.wind);
                 }
                 else {
                     icon.setImageResource(R.mipmap.extreme);
                 }
             }
-        }
     }
 
 }

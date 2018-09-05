@@ -6,23 +6,23 @@ package com.jakebethune.smarthome.model;
 
 public class TodaysWeather {
     private String timestamp;
-    private int clouds;
-    private double currentTemp;
+    private String clouds;
+    private String currentTemp;
     private String detail;
-    private int humidity;
-    private double maxTemp;
-    private double minTemp;
+    private String humidity;
+    private String maxTemp;
+    private String minTemp;
     private String sunrise;
     private String sunset;
     private String weather;
-    private int windDirection;
-    private double windSpeed;
+    private String windDirection;
+    private String windSpeed;
 
     public TodaysWeather() {
 
     }
 
-    public TodaysWeather(String timestamp, int clouds, double currentTemp, String detail, int humidity, double maxTemp, double minTemp, String sunrise, String sunset, String weather, int windDirection, double windSpeed) {
+    public TodaysWeather(String timestamp, String clouds, String currentTemp, String detail, String humidity, String maxTemp, String minTemp, String sunrise, String sunset, String weather, String windDirection, String windSpeed) {
         this.timestamp = timestamp;
         this.clouds = clouds;
         this.currentTemp = currentTemp;
@@ -49,19 +49,19 @@ public class TodaysWeather {
         return timestamp.substring(timestamp.length() - 5, timestamp.length());
     }
 
-    public int getClouds() {
+    public String getClouds() {
         return clouds;
     }
 
-    public void setClouds(int clouds) {
+    public void setClouds(String clouds) {
         this.clouds = clouds;
     }
 
-    public double getCurrentTemp() {
+    public String getCurrentTemp() {
         return currentTemp;
     }
 
-    public void setCurrentTemp(double currentTemp) {
+    public void setCurrentTemp(String currentTemp) {
         this.currentTemp = currentTemp;
     }
 
@@ -73,27 +73,27 @@ public class TodaysWeather {
         this.detail = detail;
     }
 
-    public int getHumidity() {
+    public String getHumidity() {
         return humidity;
     }
 
-    public void setHumidity(int humidity) {
+    public void setHumidity(String humidity) {
         this.humidity = humidity;
     }
 
-    public double getMaxTemp() {
+    public String getMaxTemp() {
         return maxTemp;
     }
 
-    public void setMaxTemp(double maxTemp) {
+    public void setMaxTemp(String maxTemp) {
         this.maxTemp = maxTemp;
     }
 
-    public double getMinTemp() {
+    public String getMinTemp() {
         return minTemp;
     }
 
-    public void setMinTemp(double minTemp) {
+    public void setMinTemp(String minTemp) {
         this.minTemp = minTemp;
     }
 
@@ -121,19 +121,19 @@ public class TodaysWeather {
         this.weather = weather;
     }
 
-    public int getWindDirection() {
+    public String getWindDirection() {
         return windDirection;
     }
 
-    public void setWindDirection(int windDirection) {
+    public void setWindDirection(String windDirection) {
         this.windDirection = windDirection;
     }
 
-    public double getWindSpeed() {
+    public String getWindSpeed() {
         return windSpeed;
     }
 
-    public void setWindSpeed(double windSpeed) {
+    public void setWindSpeed(String windSpeed) {
         this.windSpeed = windSpeed;
     }
 }

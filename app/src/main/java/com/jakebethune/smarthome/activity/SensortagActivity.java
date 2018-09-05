@@ -2,10 +2,10 @@ package com.jakebethune.smarthome.activity;
 
 import android.app.ProgressDialog;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
@@ -16,9 +16,6 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.jakebethune.smarthome.R;
 import com.jakebethune.smarthome.model.Sensortag;
-import com.jakebethune.smarthome.adapter.SensortagAdapter;
-
-import java.util.ArrayList;
 
 /**
  * Created by bethunej01 on 4/10/17.
@@ -26,11 +23,7 @@ import java.util.ArrayList;
 
 public class SensortagActivity extends AppCompatActivity {
 
-    private ArrayList<Sensortag> sensortag = new ArrayList<>();
-    private RecyclerView recyclerView;
-    private SensortagAdapter adapter;
     private ProgressDialog progressDialog;
-    private DatabaseReference databaseReference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,56 +37,52 @@ public class SensortagActivity extends AppCompatActivity {
         progressDialog.setMessage("Retrieving Your Sensortag Data...");
         progressDialog.show();
 
-        databaseReference = FirebaseDatabase.getInstance().getReference();
-
-        recyclerView = (RecyclerView) findViewById(R.id.sensortagRecyclerView);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(linearLayoutManager);
-        linearLayoutManager.setReverseLayout(true);
-        linearLayoutManager.setStackFromEnd(true);
-
-        refreshData();
+        getSensortagDatabase();
     }
 
-    public void refreshData() {
+    public void getSensortagDatabase() {
+
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
         Query query = databaseReference.child("Sensortag");
-        query.addValueEventListener(new ValueEventListener() {
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                getUpdates(dataSnapshot);
-                adapter.notifyDataSetChanged();
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    getUpdates(dataSnapshot);
+                    progressDialog.dismiss();
+                }
+
+                else {
+                    progressDialog.dismiss();
+                    Toast.makeText(SensortagActivity.this, "Cannot retrieve sensortag data! Please try again", Toast.LENGTH_LONG).show();
+                }
             }
 
             @Override
-            public void onCancelled(DatabaseError databaseError) {
+            public void onCancelled(@NonNull DatabaseError databaseError) {
 
             }
         });
+
     }
 
     public void getUpdates(DataSnapshot dataSnapshot) {
-        sensortag.clear();
 
-        for (DataSnapshot ds : dataSnapshot.getChildren()) {
-            Sensortag sensortagData = new Sensortag();
-            sensortagData.setTimestamp(ds.getValue(Sensortag.class).getTimestamp());
-            sensortagData.setLight(ds.getValue(Sensortag.class).getLight());
-            sensortagData.setObjectTemp(ds.getValue(Sensortag.class).getObjectTemp());
-            sensortagData.setAmbientTemp(ds.getValue(Sensortag.class).getAmbientTemp());
-            sensortagData.setHumidity(ds.getValue(Sensortag.class).getHumidity());
-            sensortagData.setPressure(ds.getValue(Sensortag.class).getPressure());
-            sensortag.add(sensortagData);
-        }
+        Sensortag sensortag = dataSnapshot.getValue(Sensortag.class);
 
-        if (sensortag.size() >= 0) {
-            adapter = new SensortagAdapter(SensortagActivity.this, sensortag);
-            recyclerView.setAdapter(adapter);
-        }
+        TextView timestampText = (TextView) findViewById(R.id.timeHeading);
+        TextView lightText = (TextView) findViewById(R.id.lightValue);
+        TextView objectTempText = (TextView) findViewById(R.id.objectTempValue);
+        TextView ambientTempText = (TextView) findViewById(R.id.ambientTempValue);
+        TextView humidityText = (TextView) findViewById(R.id.humidityValue);
+        TextView pressureText = (TextView) findViewById(R.id.pressureValue);
 
-        else {
-            Toast.makeText(this, "No data", Toast.LENGTH_SHORT).show();
-        }
+        timestampText.setText(sensortag.getTimestamp());
+        lightText.setText(sensortag.getLight());
+        ambientTempText.setText(sensortag.getAmbientTemp());
+        objectTempText.setText(sensortag.getObjectTemp());
+        humidityText.setText(sensortag.getHumidity());
+        pressureText.setText(sensortag.getPressure());
 
-        progressDialog.hide();
     }
 }

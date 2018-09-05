@@ -33,8 +33,6 @@ public class DeviceActivity extends AppCompatActivity {
     private DatabaseReference databaseReference;
     private EditText deviceNameEditText;
     private Button deviceButton;
-//    private Switch deviceSwitch;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +49,6 @@ public class DeviceActivity extends AppCompatActivity {
 
         refreshData();
 
-//        deviceSwitch = (Switch) findViewById(R.id.lightSwitch);
         deviceButton = (Button) findViewById(R.id.deviceButton);
 
         Button createDeviceButton = (Button) findViewById(R.id.addDeviceButton);

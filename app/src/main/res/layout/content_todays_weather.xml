@@ -26,8 +26,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        android:paddingTop="16dp"
         android:paddingBottom="16dp"
-        android:weightSum="3">
+        android:weightSum="2">
 
         <LinearLayout
             android:id="@+id/weatherLayout"
@@ -49,35 +50,6 @@
 
             <TextView
                 android:id="@+id/weatherValue"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="No Data"
-                android:textSize="20sp"
-                android:layout_gravity="center"
-                android:textAlignment="center"/>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/detailLayout"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_gravity="center"
-            android:layout_weight="1">
-
-            <TextView
-                android:id="@+id/detailHeading"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Detail"
-                android:textStyle="bold"
-                android:textSize="20sp"
-                android:layout_gravity="center"
-                android:textAlignment="center"/>
-
-            <TextView
-                android:id="@+id/detailValue"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="No Data"

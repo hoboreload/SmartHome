@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import com.jakebethune.smarthome.adapter.HomeAdapter;
 import com.jakebethune.smarthome.R;
+import com.jakebethune.smarthome.model.TodaysWeather;
 
 /**
  * Created by bethunej01 on 26/2/18.
@@ -19,8 +20,8 @@ import com.jakebethune.smarthome.R;
 public class HomeActivity extends AppCompatActivity {
 
     GridView gridview;
-    String[] gridviewText = {"Home", "Devices", "Forecast", "SensorTag", "Weather"};
-    int[] gridviewImage = {R.drawable.home, R.drawable.devices, R.drawable.weather, R.drawable.weather, R.drawable.weather};
+    String[] gridviewText = {"Home", "Devices", "Weather", "SensorTag"};
+    int[] gridviewImage = {R.drawable.home, R.drawable.devices, R.drawable.weather, R.drawable.weather};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,17 +51,12 @@ public class HomeActivity extends AppCompatActivity {
                         break;
 
                     case 2:
-                        intent =  new Intent(view.getContext(), ForecastActivity.class);
+                        intent =  new Intent(view.getContext(), TodaysWeatherActivity.class);
                         startActivity(intent);
                         break;
 
                     case 3:
                         intent =  new Intent(view.getContext(), SensortagActivity.class);
-                        startActivity(intent);
-                        break;
-
-                    case 4:
-                        intent =  new Intent(view.getContext(), TodaysWeatherActivity.class);
                         startActivity(intent);
                         break;
                 }
