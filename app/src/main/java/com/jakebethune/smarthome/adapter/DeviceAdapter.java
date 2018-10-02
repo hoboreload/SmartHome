@@ -55,12 +55,10 @@ public class DeviceAdapter extends RecyclerView.Adapter<DeviceAdapter.ViewHolder
         String powerState = devices.get(position).getPowerState();
 
         if(powerState.equals("0")) {
-            holder.devicePowerStateText.setText("OFF");
             holder.powerButton.setText("TURN ON");
         }
 
         if(powerState.equals("1")) {
-            holder.devicePowerStateText.setText("ON");
             holder.powerButton.setText("TURN OFF");
         }
     }
@@ -73,7 +71,6 @@ public class DeviceAdapter extends RecyclerView.Adapter<DeviceAdapter.ViewHolder
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         TextView deviceNameText;
-        TextView devicePowerStateText;
         Button powerButton;
         int offTemp;
         int onTemp;
@@ -81,13 +78,12 @@ public class DeviceAdapter extends RecyclerView.Adapter<DeviceAdapter.ViewHolder
         String offTime;
         boolean timeOverride;
         boolean tempOverride;
-        String powerState;
+
 
         public ViewHolder(View itemView) {
             super(itemView);
 
             deviceNameText = (TextView) itemView.findViewById(R.id.deviceName);
-            devicePowerStateText = (TextView) itemView.findViewById(R.id.deviceStateText);
 
             RelativeLayout lightNameLayout = (RelativeLayout) itemView.findViewById(R.id.deviceItemRelativeLayout);
             lightNameLayout.setOnLongClickListener(new View.OnLongClickListener() {
@@ -106,7 +102,6 @@ public class DeviceAdapter extends RecyclerView.Adapter<DeviceAdapter.ViewHolder
                 public void onClick(View v) {
                     String name = deviceNameText.getText().toString();
                     nameString = name;
-                    String powerState = devicePowerStateText.getText().toString();
 
                     Query query = databaseReference.child("Device").child(name);
                     query.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -118,15 +113,13 @@ public class DeviceAdapter extends RecyclerView.Adapter<DeviceAdapter.ViewHolder
                             offTime = dataSnapshot.getValue(Device.class).getOffTime();
                             tempOverride = dataSnapshot.getValue(Device.class).isTempOverride();
                             timeOverride = dataSnapshot.getValue(Device.class).isTimeOverride();
-//                            powerState = dataSnapshot.getValue(Device.class).getPowerState();
-                            String powerState = devicePowerStateText.getText().toString();
 
                             Log.d("TAG", "After: onTemp " + onTemp + ", offTemp " + offTemp + ", onTime " + onTime + ", offTime " + offTime+ ", tempOv " + tempOverride + ", timeOv" + timeOverride);
-                            if (powerState == "OFF") {
+                            if (powerButton.getText().toString() == "TURN ON") {
                                 updateDeviceSwitch("1", nameString, onTemp, offTemp, onTime, offTime, timeOverride, tempOverride);
                             }
 
-                            if(powerState == "ON") {
+                            if(powerButton.getText().toString() == "TURN OFF") {
                                 updateDeviceSwitch("0", nameString, onTemp, offTemp, onTime, offTime, timeOverride, tempOverride);
                             }
 
