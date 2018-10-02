@@ -7,6 +7,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -76,7 +77,7 @@ public class DeviceActivity extends AppCompatActivity {
             String deviceName = deviceNameEditText.getText().toString();
             if (!TextUtils.isEmpty(deviceName)) {
                 String deviceCapital = deviceName.substring(0, 1).toUpperCase() + deviceName.substring(1);
-                Query query = databaseReference.child("Device").orderByChild("lightName").equalTo(deviceCapital);
+                Query query = databaseReference.child("Device").orderByChild("deviceName").equalTo(deviceCapital);
                 query.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
@@ -86,8 +87,8 @@ public class DeviceActivity extends AppCompatActivity {
                         else {
                             String deviceName = deviceNameEditText.getText().toString();
                             String deviceCapital = deviceName.substring(0, 1).toUpperCase() + deviceName.substring(1);
-                            String powerState = "0";
-                            saveDevice(deviceCapital, powerState, 0, 0, "1:00", "1:00", false, false);
+                            String powerState = "1";
+                            saveDevice(deviceCapital, powerState, 0, 0, "1:30", "1:30", false, false);
                             deviceNameEditText.setText("");
                             Toast.makeText(DeviceActivity.this, "Device Added", Toast.LENGTH_LONG).show();
                             dialog.dismiss();
@@ -131,13 +132,13 @@ public class DeviceActivity extends AppCompatActivity {
         });
     }
 
-    private void saveDevice(String name, String powerState, int minTemp, int maxTemp, String onTime, String offTime, boolean tempOverride, boolean timeOverride) {
+    private void saveDevice(String name, String powerState, int onTemp, int offTemp, String onTime, String offTime, boolean tempOverride, boolean timeOverride) {
         Device device = new Device();
         String deviceCapital = name.substring(0, 1).toUpperCase() + name.substring(1);
         device.setDeviceName(deviceCapital);
         device.setPowerState(powerState);
-        device.setOnTemp(minTemp);
-        device.setOffTemp(maxTemp);
+        device.setOnTemp(onTemp);
+        device.setOffTemp(offTemp);
         device.setOnTime(onTime);
         device.setOffTime(offTime);
         device.setTempOverride(tempOverride);
@@ -159,6 +160,18 @@ public class DeviceActivity extends AppCompatActivity {
             device.setOffTime(ds.getValue(Device.class).getOffTime());
             device.setTimeOverride(ds.getValue(Device.class).isTimeOverride());
             device.setTempOverride(ds.getValue(Device.class).isTempOverride());
+
+
+            int onTemp = ds.getValue(Device.class).getOnTemp();
+            int offTemp = ds.getValue(Device.class).getOffTemp();
+            String onTime = ds.getValue(Device.class).getOnTime();
+            String offTime = ds.getValue(Device.class).getOffTime();
+            boolean timeOverride = ds.getValue(Device.class).isTimeOverride();
+            boolean tempOverride = ds.getValue(Device.class).isTempOverride();
+
+
+            Log.d("TAG", "Activity: onTemp " + onTemp + ", offTemp " + offTemp + ", onTime " + onTime + ", offTime " + offTime+ ", tempOv " + tempOverride + ", timeOv" + timeOverride);
+
             devices.add(device);
         }
 

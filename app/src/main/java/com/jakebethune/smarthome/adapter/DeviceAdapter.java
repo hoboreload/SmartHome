@@ -2,7 +2,9 @@ package com.jakebethune.smarthome.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,8 +13,12 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.jakebethune.smarthome.R;
 import com.jakebethune.smarthome.activity.DeviceSettingsActivity;
 import com.jakebethune.smarthome.activity.HomeActivity;
@@ -30,7 +36,6 @@ public class DeviceAdapter extends RecyclerView.Adapter<DeviceAdapter.ViewHolder
     private static final String DEVICE = "DEVICE";
     private DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
     private String nameString;
-    private String stateString;
 
     public DeviceAdapter(Context context, ArrayList<Device> devices) {
         this.devices = devices;
@@ -70,6 +75,13 @@ public class DeviceAdapter extends RecyclerView.Adapter<DeviceAdapter.ViewHolder
         TextView deviceNameText;
         TextView devicePowerStateText;
         Button powerButton;
+        int offTemp;
+        int onTemp;
+        String onTime;
+        String offTime;
+        boolean timeOverride;
+        boolean tempOverride;
+        String powerState;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -81,7 +93,6 @@ public class DeviceAdapter extends RecyclerView.Adapter<DeviceAdapter.ViewHolder
             lightNameLayout.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
-                    Toast.makeText(v.getContext(), "Long Clicked: " + deviceNameText.getText().toString() , Toast.LENGTH_SHORT).show();
                     Intent intent =  new Intent(v.getContext(), DeviceSettingsActivity.class);
                     intent.putExtra("DEVICE_NAME", deviceNameText.getText().toString());
                     context.startActivity(intent);
@@ -96,33 +107,60 @@ public class DeviceAdapter extends RecyclerView.Adapter<DeviceAdapter.ViewHolder
                     String name = deviceNameText.getText().toString();
                     nameString = name;
                     String powerState = devicePowerStateText.getText().toString();
-                    if(powerState == "OFF") {
-                        updateDeviceSwitch("1", nameString);
-                    }
-                    if(powerState == "ON") {
-                        updateDeviceSwitch("0", nameString);
-                    }
+
+                    Query query = databaseReference.child("Device").child(name);
+                    query.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            offTemp = dataSnapshot.getValue(Device.class).getOffTemp();
+                            onTemp = dataSnapshot.getValue(Device.class).getOnTemp();
+                            onTime = dataSnapshot.getValue(Device.class).getOnTime();
+                            offTime = dataSnapshot.getValue(Device.class).getOffTime();
+                            tempOverride = dataSnapshot.getValue(Device.class).isTempOverride();
+                            timeOverride = dataSnapshot.getValue(Device.class).isTimeOverride();
+//                            powerState = dataSnapshot.getValue(Device.class).getPowerState();
+                            String powerState = devicePowerStateText.getText().toString();
+
+                            Log.d("TAG", "After: onTemp " + onTemp + ", offTemp " + offTemp + ", onTime " + onTime + ", offTime " + offTime+ ", tempOv " + tempOverride + ", timeOv" + timeOverride);
+                            if (powerState == "OFF") {
+                                updateDeviceSwitch("1", nameString, onTemp, offTemp, onTime, offTime, timeOverride, tempOverride);
+                            }
+
+                            if(powerState == "ON") {
+                                updateDeviceSwitch("0", nameString, onTemp, offTemp, onTime, offTime, timeOverride, tempOverride);
+                            }
+
+
+                            Log.d("TAG", "Adapter: onTemp " + onTemp + ", offTemp " + offTemp + ", onTime " + onTime + ", offTime " + offTime+ ", tempOv " + tempOverride + ", timeOv" + timeOverride);
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                        }
+
+                    });
                 }
             });
         }
 
-        private void updateDeviceSwitch(String state, String name) {
+        private void updateDeviceSwitch(String state, String name, int onTemp, int offTemp, String onTime, String offTime, boolean timeOverride, boolean tempOverride) {
+
+            Log.d("TAG", "Update: onTemp " + onTemp + ", offTemp " + offTemp + ", onTime " + onTime + ", offTime " + offTime+ ", tempOv " + tempOverride + ", timeOv" + timeOverride);
+
+
             Device device = new Device();
             device.setPowerState(state);
             device.setDeviceName(name);
+            device.setOnTemp(onTemp);
+            device.setOffTemp(offTemp);
+            device.setOnTime(onTime);
+            device.setOffTime(offTime);
+            device.setTimeOverride(timeOverride);
+            device.setTempOverride(tempOverride);
             Map<String, Object> switchUpdate = new HashMap<String, Object>();
             switchUpdate.put(name, device);
             databaseReference.child("Device").updateChildren(switchUpdate);
-
-            if(state == "0") {
-                devicePowerStateText.setText("OFF");
-                powerButton.setText("TURN ON");
-            }
-
-            if(state == "1") {
-                devicePowerStateText.setText("ON");
-                powerButton.setText("TURN OFF");
-            }
         }
     }
 }
