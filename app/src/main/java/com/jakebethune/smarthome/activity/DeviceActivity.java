@@ -87,7 +87,7 @@ public class DeviceActivity extends AppCompatActivity {
                             String deviceName = deviceNameEditText.getText().toString();
                             String deviceCapital = deviceName.substring(0, 1).toUpperCase() + deviceName.substring(1);
                             String powerState = "0";
-                            saveDevice(deviceCapital, powerState, 24, 25);
+                            saveDevice(deviceCapital, powerState, 0, 0, "1:00", "1:00", false, false);
                             deviceNameEditText.setText("");
                             Toast.makeText(DeviceActivity.this, "Device Added", Toast.LENGTH_LONG).show();
                             dialog.dismiss();
@@ -131,13 +131,17 @@ public class DeviceActivity extends AppCompatActivity {
         });
     }
 
-    private void saveDevice(String name, String powerState, int minTemp, int maxTemp) {
+    private void saveDevice(String name, String powerState, int minTemp, int maxTemp, String onTime, String offTime, boolean tempOverride, boolean timeOverride) {
         Device device = new Device();
         String deviceCapital = name.substring(0, 1).toUpperCase() + name.substring(1);
         device.setDeviceName(deviceCapital);
         device.setPowerState(powerState);
-        device.setMinTemp(minTemp);
-        device.setMaxTemp(maxTemp);
+        device.setOnTemp(minTemp);
+        device.setOffTemp(maxTemp);
+        device.setOnTime(onTime);
+        device.setOffTime(offTime);
+        device.setTempOverride(tempOverride);
+        device.setTimeOverride(timeOverride);
         databaseReference.child("Device").child(deviceCapital).setValue(device);
 
     }
@@ -149,8 +153,12 @@ public class DeviceActivity extends AppCompatActivity {
             Device device = new Device();
             device.setDeviceName(ds.getValue(Device.class).getDeviceName());
             device.setPowerState(ds.getValue(Device.class).getPowerState());
-            device.setMinTemp(ds.getValue(Device.class).getMinTemp());
-            device.setMaxTemp(ds.getValue(Device.class).getMaxTemp());
+            device.setOnTemp(ds.getValue(Device.class).getOnTemp());
+            device.setOffTemp(ds.getValue(Device.class).getOffTemp());
+            device.setOnTime(ds.getValue(Device.class).getOnTime());
+            device.setOffTime(ds.getValue(Device.class).getOffTime());
+            device.setTimeOverride(ds.getValue(Device.class).isTimeOverride());
+            device.setTempOverride(ds.getValue(Device.class).isTempOverride());
             devices.add(device);
         }
 
