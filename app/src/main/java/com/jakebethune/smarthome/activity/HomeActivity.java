@@ -37,7 +37,6 @@ public class HomeActivity extends AppCompatActivity {
         gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(HomeActivity.this, "GridView Item: " + gridviewText[+position], Toast.LENGTH_LONG).show();
                 final Intent intent;
                 switch(position) {
                     case 0:

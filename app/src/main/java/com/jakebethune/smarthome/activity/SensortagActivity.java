@@ -1,10 +1,13 @@
 package com.jakebethune.smarthome.activity;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -38,6 +41,24 @@ public class SensortagActivity extends AppCompatActivity {
         progressDialog.show();
 
         getSensortagDatabase();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.home) {
+            Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
+            startActivity(intent);
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     public void getSensortagDatabase() {
@@ -78,11 +99,11 @@ public class SensortagActivity extends AppCompatActivity {
         TextView pressureText = (TextView) findViewById(R.id.pressureValue);
 
         timestampText.setText(sensortag.getTimestamp());
-        lightText.setText(sensortag.getLight());
-        ambientTempText.setText(sensortag.getAmbientTemp());
-        objectTempText.setText(sensortag.getObjectTemp());
-        humidityText.setText(sensortag.getHumidity());
-        pressureText.setText(sensortag.getPressure());
+        lightText.setText(sensortag.getLight() + " lux");
+        ambientTempText.setText(sensortag.getAmbientTemp() + "°C");
+        objectTempText.setText(sensortag.getObjectTemp() + "°C");
+        humidityText.setText(sensortag.getHumidity() + "%");
+        pressureText.setText(sensortag.getPressure() + " hPa");
 
     }
 }
